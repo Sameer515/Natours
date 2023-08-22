@@ -1,6 +1,9 @@
-const fs = require('fs');
+
 const express = require('express');
 const morgan = require('morgan');
+
+const tourRouter = require ('./routes/tourRoutes');
+const usersRouter = require('./routes/userRoutes');
 
 const app=express();
 
@@ -11,169 +14,13 @@ app.use(express.json());
 
 const port= 3000;
 
-const tours =JSON.parse(
-    fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
-    );
+
 
 //Route handlers
 
-const getallTours= (req, res) => {
-res.status(200).json({
-  status: 'Success',
-  reqesttime: new Date().toISOString(),
-  results:tours.length,
-  data: {tours}
-})
-};
-
-const getTour =(req, res) => {
-
-  const id=req.params.id*1;
-  const tour=tours.find(el => el.id === id);
-
- // if(id>tours.length){
-  if(!tour){
-    return res.status(404).json({
-        status: 'Error',
-        message: 'Tour not found or invalid ID'
-    });
-  }
-
- 
-  res.status(200).json ({
-             data: {tour}
-  });
-  }
-
-const createTour =(req, res) =>{
-  // console.log(req.body);
-  const newId = tours[tours.length -1].id +1 ;
-  const newTour = Object.assign({id: newId},req.body);
-  tours.push(newTour);
-
-  fs.writeFile(
-   `${__dirname}/dev-data/data/tours-simple.json`,
-   JSON.stringify(tours)
-   ,error =>{
-   res.status(201).json({
-       status: 'Success',
-         data: {
-           tours: newTour
-         } 
-       });
-     }
-  );
-
-  }
-
-  const updateTour = (req,res)=>{
-
-    if(req.params.id *1 >tours.length)
-    {
-      return res.status(404).json({
-          status: 'Error',
-          message: 'Tour not found or invalid ID'
-      });
-    }
-  
-    res.status(200).json({
-      status:'Success',
-      data : {
-        tours: 'update tour here'
-      }
-  
-    });
-  
-  }
-
-  const deleteTour = (req,res)=>{
-
-    if(req.params.id *1 >tours.length)
-    {
-      return res.status(404).json({
-          status: 'Error',
-          message: 'Tour not found or invalid ID'
-      });
-    }
-  
-    res.status(204).json({
-      status:'Success',
-      data : null
-  
-    });
-  
-  }
-
-  const getallusers = (req, res) => {
-    res.status(500).json({
-      status:'Error',
-      message:'This route tbd'
-    })
-  };
-
-  const getUser = (req, res) => {
-    res.status(500).json({
-      status:'Error',
-      message:'This route tbd'
-    })
-  };
-
-  const createUser = (req, res) => {
-    res.status(500).json({
-      status:'Error',
-      message:'This route tbd'
-    })
-  };
-
-  const updateUser = (req, res) => {
-    res.status(500).json({
-      status:'Error',
-      message:'This route tbd'
-    })
-  };
-
-  const deleteUser = (req, res) => {
-    res.status(500).json({
-      status:'Error',
-      message:'This route tbd'
-    })
-  };
-
-//app.get('/api/v1/tours',getallTours);
-//app.post('/api/v1/tours',createTour);
-
-// app.get('/api/v1/tours/:id',getTour);  
-// app.patch('/api/v1/tours/:id',updateTour);
-// app.delete('/api/v1/tours/:id',deleteTour);
-
-//Routes
-const tourRouter = express.Router();
-const usersRouter = express.Router();
 
 
 
-tourRouter
-.route('/')
-.get(getallTours)
-.post(createTour);
-
-tourRouter
-.route('/:id')
-.get(getTour)
-.patch(updateTour)
-.delete(deleteTour);
-
-
-usersRouter
-.route('/')
-.get(getallusers)
-.post(createUser);
-
-usersRouter
-.route('/:id')
-.get(getUser)
-.patch(updateUser)
-.delete(deleteUser);
 
 
 app.use('/api/v1/tours',tourRouter);
