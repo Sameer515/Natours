@@ -104,6 +104,41 @@ const createTour =(req, res) =>{
   
   }
 
+  const getallusers = (req, res) => {
+    res.status(500).json({
+      status:'Error',
+      message:'This route tbd'
+    })
+  };
+
+  const getUser = (req, res) => {
+    res.status(500).json({
+      status:'Error',
+      message:'This route tbd'
+    })
+  };
+
+  const createUser = (req, res) => {
+    res.status(500).json({
+      status:'Error',
+      message:'This route tbd'
+    })
+  };
+
+  const updateUser = (req, res) => {
+    res.status(500).json({
+      status:'Error',
+      message:'This route tbd'
+    })
+  };
+
+  const deleteUser = (req, res) => {
+    res.status(500).json({
+      status:'Error',
+      message:'This route tbd'
+    })
+  };
+
 //app.get('/api/v1/tours',getallTours);
 //app.post('/api/v1/tours',createTour);
 
@@ -112,17 +147,37 @@ const createTour =(req, res) =>{
 // app.delete('/api/v1/tours/:id',deleteTour);
 
 //Routes
+const tourRouter = express.Router();
+const usersRouter = express.Router();
 
-app
-.route('/api/v1/tours')
+
+
+tourRouter
+.route('/')
 .get(getallTours)
 .post(createTour);
 
-app
-.route('/api/v1/tours/:id')
+tourRouter
+.route('/:id')
 .get(getTour)
 .patch(updateTour)
 .delete(deleteTour);
+
+
+usersRouter
+.route('/')
+.get(getallusers)
+.post(createUser);
+
+usersRouter
+.route('/:id')
+.get(getUser)
+.patch(updateUser)
+.delete(deleteUser);
+
+
+app.use('/api/v1/tours',tourRouter);
+app.use('/api/v1/users',usersRouter);
 
 //Start server
 
