@@ -13,9 +13,9 @@ const app = require('./app');
 // mongoose
 
 mongoose.set('useNewUrlParser', true);
-mongoose.set('useCreateIndex', true);
+// mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.set('useFindAndModify', false);
+// mongoose.set('useFindAndModify', false);
 
 mongoose
     .connect(DB, { useNewUrlParser: true })
