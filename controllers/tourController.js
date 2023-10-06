@@ -2,7 +2,7 @@
 const APIFeatuer = require('../utils/apiFeatures');
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
-
+const AppError = require('../utils/catchAsync');
 // const tours = JSON.parse(
 //     fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 // );
@@ -104,25 +104,22 @@ exports.getallTours = catchAsync(async (req, res, next) => {
     // }
 });
 
-exports.getTour = async (req, res) => {
-    try {
-        const tour = await Tour.findById(req.params.id);
-        res.status(200).json({
-            status: 'success',
-            data: { tour },
-        });
-    } catch (e) {
-        res.status(404).json({
-            status: 'Failed not found',
-            message: e.message,
-        });
+exports.getTour = catchAsync(async (req, res, next) => {
+    const tour = await Tour.findById(req.params.id);
+    if (!tour) {
+        return next(new AppError('No tour found with that ID', 404));
     }
+    res.status(200).json({
+        status: 'success',
+        data: { tour },
+    });
+
     // const id = req.params.id * 1;
     // //const tour = tours.find((el) => el.id === id);
     // res.status(200).json({
     //     data: { tour },
     // });
-};
+});
 
 exports.createTour = catchAsync(async (req, res, next) => {
     const newTour = await Tour.create(req.body);
@@ -170,6 +167,9 @@ exports.updateTour = catchAsync(async (req, res, next) => {
         new: true,
         runValidators: true,
     });
+    if (!tour) {
+        return next(new AppError('No tour found with that ID', 404));
+    }
     res.status(200).json({
         status: 'Success',
         data: {
@@ -180,6 +180,9 @@ exports.updateTour = catchAsync(async (req, res, next) => {
 
 exports.deleteTour = catchAsync(async (req, res, next) => {
     const tour = await Tour.findByIdAndDelete(req.params.id);
+    if (!tour) {
+        return next(new AppError('No tour found with that ID', 404));
+    }
     res.status(204).json({
         status: 'Success',
         data: null,
